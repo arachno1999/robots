@@ -1,0 +1,46 @@
+# DOC STEP 1 alle Einträge aus Datenbank lesen und abarbeiten
+loop ende url sql select%SPACE%id%SPACE%from%SPACE%robo_webwatch%SPACE%where%SPACE%aktiv="Y"
+	get_record sys_error_exit webwatch %VAR_loop_url_value% record
+	#DOC STEP 3 Webseite öffnen
+	open sys_error_exit %VAR_record_webadresse%
+	#DOC STEP 4 links und header einsammeln und vergleichen
+	tmparray clear
+	collect sys_error_exit links xpath%SEP%//a%SEP%innerHTML%SEP%striptags
+	loop next_tag_0 link_0 collect links
+		tmparray add %VAR_loop_link_0_value% x
+	goto loop_link_0
+	label next_tag_0
+	collect sys_error_exit links xpath%SEP%//h1%SEP%innerHTML%SEP%striptags
+	loop next_tag_1 link_1 collect links
+		tmparray add %VAR_loop_link_1_value% x
+	goto loop_link_1
+	label next_tag_1
+	collect sys_error_exit links xpath%SEP%//h2%SEP%innerHTML%SEP%striptags
+	loop next_tag_2 link_2 collect links
+		tmparray add %VAR_loop_link_2_value% x
+	goto loop_link_2
+	label next_tag_2
+	collect sys_error_exit links xpath%SEP%//h3%SEP%innerHTML%SEP%striptags
+	loop next_tag_3 link_3 collect links
+		tmparray add %VAR_loop_link_3_value% x
+	goto loop_link_3
+	label next_tag_3
+	collect sys_error_exit links xpath%SEP%//h4%SEP%innerHTML%SEP%striptags
+	loop next_tag_4 link_4 collect links
+		tmparray add %VAR_loop_link_4_value% x
+	goto loop_link_4
+	label next_tag_4
+	collect sys_error_exit links xpath%SEP%//h5%SEP%innerHTML%SEP%striptags
+	loop next_tag_5 link_5 collect links
+		tmparray add %VAR_loop_link_5_value% x
+	goto loop_link_5
+	label next_tag_5
+	tmparray syncdb %VAR_record_bezeichnung% %VAR_record_id%
+	compare send_message %SESSION_SYNCRESULT% != %NONE%
+goto loop_url
+#DOC STEP 5 Nachricht versenden, falls Änderungen auftreten
+label send_message
+	message 11 customer%SEP%admin%SEP%param %ROBOT_name% %SESSION_SYNCRESULT% dummy dummy dummy %VAR_record_email%
+	goto loop_url
+label ende
+
