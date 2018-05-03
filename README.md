@@ -1,4 +1,6 @@
 # productive robots
+robot.Handelsregister
+
 robot.ImmoSearch
 
 robot.WebWatcher
